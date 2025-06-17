@@ -455,15 +455,15 @@
           <div class="card-box align-left">
 
             <!-- 🔲 Contenedor relativo para superposición -->
-            <div style="position: relative; width: 100%; height: 600px;">
+            <div id="iframeContainer" style="position: relative; width: 100%; height: 600px;">
 
               <!-- 🎮 Juego embebido desde Netlify -->
               <iframe 
                 id="gameFrame"
                 src="https://alasdecalabozo.netlify.app/" 
                 width="100%" 
-                height="600px" 
-                style="border: none;" 
+                height="100%" 
+                style="border: none; display: block;" 
                 allowfullscreen
                 allow="geolocation; autoplay">
               </iframe>
@@ -487,32 +487,24 @@
                 <div>Cargando el juego...</div>
 
                 <!-- 🟢 Botón para ocultar overlay -->
-                <button onclick="document.getElementById('overlay').style.display = 'none'" style="
+                <img src="assets/images/iniciar.png" alt="Iniciar Juego" onclick="document.getElementById('overlay').style.display = 'none'" style="
                   margin-top: 1em;
-                  padding: 10px 20px;
-                  font-size: 1rem;
-                  border: none;
-                  border-radius: 5px;
-                  background-color: #ffffff;
-                  color: #333;
+                  width: 200px;
+                  height: auto;
                   cursor: pointer;
-                ">Iniciar juego</button>
+                ">
               </div>
 
               <!-- 🔳 Botón de pantalla completa -->
-              <button onclick="openFullscreen()" style="
+               <img src="assets/images/pantalla.png" alt="Pantalla completa" onclick="openFullscreen()" style="
                 position: absolute;
                 bottom: 10px;
                 right: 10px;
                 z-index: 11;
-                padding: 8px 16px;
-                font-size: 0.9rem;
-                border: none;
-                border-radius: 4px;
-                background-color: #ffffffdd;
-                color: #000;
+                width: 150px;
+                height: auto;
                 cursor: pointer;
-              ">Pantalla completa</button>
+              ">
 
             </div>
 
@@ -527,18 +519,39 @@
     </div>
   </div>
 
-  <!-- ✅ Script para activar pantalla completa -->
+  <!-- ✅ Script para activar pantalla completa y redimensionar iframe -->
   <script>
     function openFullscreen() {
-      const iframe = document.getElementById('gameFrame');
-      if (iframe.requestFullscreen) {
-        iframe.requestFullscreen();
-      } else if (iframe.mozRequestFullScreen) { /* Firefox */
-        iframe.mozRequestFullScreen();
-      } else if (iframe.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
-        iframe.webkitRequestFullscreen();
-      } else if (iframe.msRequestFullscreen) { /* IE/Edge */
-        iframe.msRequestFullscreen();
+      const container = document.getElementById("iframeContainer");
+      if (container.requestFullscreen) {
+        container.requestFullscreen();
+      } else if (container.webkitRequestFullscreen) { // Safari
+        container.webkitRequestFullscreen();
+      } else if (container.msRequestFullscreen) { // IE11
+        container.msRequestFullscreen();
+      }
+    }
+
+    // 🔄 Ajuste dinámico del tamaño del iframe al entrar/salir de pantalla completa
+    document.addEventListener("fullscreenchange", resizeIframe);
+    document.addEventListener("webkitfullscreenchange", resizeIframe);
+    document.addEventListener("mozfullscreenchange", resizeIframe);
+    document.addEventListener("MSFullscreenChange", resizeIframe);
+
+    function resizeIframe() {
+      const iframe = document.getElementById("gameFrame");
+      const isFullscreen =
+        document.fullscreenElement ||
+        document.webkitFullscreenElement ||
+        document.mozFullScreenElement ||
+        document.msFullscreenElement;
+
+      if (isFullscreen) {
+        iframe.style.width = "100vw";
+        iframe.style.height = "100vh";
+      } else {
+        iframe.style.width = "100%";
+        iframe.style.height = "100%";
       }
     }
   </script>

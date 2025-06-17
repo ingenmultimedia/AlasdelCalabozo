@@ -443,7 +443,6 @@
         </div>
     </div>
 </section>
-
 <section data-bs-version="5.1" class="start article6 cid-uNPEmQhOOo mbr-fullscreen" id="article06-g">
   <div class="container">
     <div class="row justify-content-center">
@@ -452,7 +451,7 @@
           <div class="card-box align-left">
 
             <!-- 🔲 Relative container for overlay and iframe -->
-            <div style="position: relative; width: 100%; height: 600px;">
+            <div id="iframeContainer" style="position: relative; width: 100%; height: 600px;">
 
               <!-- 🎮 Embedded game from Netlify -->
               <iframe 
@@ -460,7 +459,7 @@
                 src="https://alasdecalabozo.netlify.app/" 
                 width="100%" 
                 height="100%" 
-                style="border: none;" 
+                style="border: none; display: block;" 
                 allowfullscreen
                 allow="geolocation; autoplay">
               </iframe>
@@ -482,32 +481,26 @@
                 z-index: 10;
               ">
                 <div>Loading game...</div>
-                <button onclick="document.getElementById('overlay').style.display = 'none'" style="
+
+                <!-- 🟢 Image button for 'Hide' -->
+                <img src="assets/images/start.png" alt="Iniciar Juego" onclick="document.getElementById('overlay').style.display = 'none'" style="
                   margin-top: 1em;
-                  padding: 10px 20px;
-                  font-size: 1rem;
-                  border: none;
-                  border-radius: 5px;
-                  background-color: #ffffff;
-                  color: #333;
+                  width: 200px;
+                  height: auto;
                   cursor: pointer;
-                ">Hide</button>
+                ">
               </div>
 
-              <!-- 🔳 Fullscreen button -->
-              <button onclick="openFullscreen()" style="
+              <!-- 🔳 Image button for fullscreen -->
+              <img src="assets/images/fullscreen.png" alt="Pantalla completa" onclick="openFullscreen()" style="
                 position: absolute;
                 bottom: 10px;
                 right: 10px;
                 z-index: 11;
-                padding: 8px 16px;
-                font-size: 0.9rem;
-                border: none;
-                border-radius: 4px;
-                background-color: #ffffffdd;
-                color: #000;
+                width: 150px;
+                height: auto;
                 cursor: pointer;
-              ">Fullscreen</button>
+              ">
 
             </div>
 
@@ -522,18 +515,38 @@
     </div>
   </div>
 
-  <!-- ✅ Script for fullscreen functionality -->
+  <!-- ✅ Script for fullscreen functionality and iframe resizing -->
   <script>
     function openFullscreen() {
-      const iframe = document.getElementById('gameFrame');
-      if (iframe.requestFullscreen) {
-        iframe.requestFullscreen();
-      } else if (iframe.mozRequestFullScreen) { // Firefox
-        iframe.mozRequestFullScreen();
-      } else if (iframe.webkitRequestFullscreen) { // Chrome, Safari, Opera
-        iframe.webkitRequestFullscreen();
-      } else if (iframe.msRequestFullscreen) { // IE/Edge
-        iframe.msRequestFullscreen();
+      const container = document.getElementById("iframeContainer");
+      if (container.requestFullscreen) {
+        container.requestFullscreen();
+      } else if (container.webkitRequestFullscreen) {
+        container.webkitRequestFullscreen();
+      } else if (container.msRequestFullscreen) {
+        container.msRequestFullscreen();
+      }
+    }
+
+    document.addEventListener("fullscreenchange", resizeIframe);
+    document.addEventListener("webkitfullscreenchange", resizeIframe);
+    document.addEventListener("mozfullscreenchange", resizeIframe);
+    document.addEventListener("MSFullscreenChange", resizeIframe);
+
+    function resizeIframe() {
+      const iframe = document.getElementById("gameFrame");
+      const isFullscreen =
+        document.fullscreenElement ||
+        document.webkitFullscreenElement ||
+        document.mozFullScreenElement ||
+        document.msFullscreenElement;
+
+      if (isFullscreen) {
+        iframe.style.width = "100vw";
+        iframe.style.height = "100vh";
+      } else {
+        iframe.style.width = "100%";
+        iframe.style.height = "100%";
       }
     }
   </script>
