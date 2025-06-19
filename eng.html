@@ -492,7 +492,7 @@
               </div>
 
               <!-- 🔳 Image button for fullscreen -->
-              <img src="assets/images/fullscreen.png" alt="Fullscreen" onclick="openFullscreen()" style="
+              <img src="assets/images/fullscreen.png" alt="Fullscreen" onclick="toggleFullscreen()" style="
                 position: absolute;
                 bottom: 10px;
                 right: 10px;
@@ -515,10 +515,18 @@
     </div>
   </div>
 
-  <!-- ✅ Script for fullscreen functionality and iframe resizing -->
-  <script>
-    function openFullscreen() {
-      const container = document.getElementById("iframeContainer");
+  <!-- ✅ Script para alternar pantalla completa y redimensionar iframe -->
+<script>
+  function toggleFullscreen() {
+    const container = document.getElementById("iframeContainer");
+    const isFullscreen =
+      document.fullscreenElement ||
+      document.webkitFullscreenElement ||
+      document.mozFullScreenElement ||
+      document.msFullscreenElement;
+
+    if (!isFullscreen) {
+      // 👉 Entrar a pantalla completa
       if (container.requestFullscreen) {
         container.requestFullscreen();
       } else if (container.webkitRequestFullscreen) {
@@ -526,30 +534,41 @@
       } else if (container.msRequestFullscreen) {
         container.msRequestFullscreen();
       }
-    }
-
-    document.addEventListener("fullscreenchange", resizeIframe);
-    document.addEventListener("webkitfullscreenchange", resizeIframe);
-    document.addEventListener("mozfullscreenchange", resizeIframe);
-    document.addEventListener("MSFullscreenChange", resizeIframe);
-
-    function resizeIframe() {
-      const iframe = document.getElementById("gameFrame");
-      const isFullscreen =
-        document.fullscreenElement ||
-        document.webkitFullscreenElement ||
-        document.mozFullScreenElement ||
-        document.msFullscreenElement;
-
-      if (isFullscreen) {
-        iframe.style.width = "100vw";
-        iframe.style.height = "100vh";
-      } else {
-        iframe.style.width = "100%";
-        iframe.style.height = "100%";
+    } else {
+      // 🔙 Salir de pantalla completa
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
       }
     }
-  </script>
+  }
+
+  // 📏 Ajustar tamaño del iframe según estado de pantalla completa
+  document.addEventListener("fullscreenchange", resizeIframe);
+  document.addEventListener("webkitfullscreenchange", resizeIframe);
+  document.addEventListener("mozfullscreenchange", resizeIframe);
+  document.addEventListener("MSFullscreenChange", resizeIframe);
+
+  function resizeIframe() {
+    const iframe = document.getElementById("gameFrame");
+    const isFullscreen =
+      document.fullscreenElement ||
+      document.webkitFullscreenElement ||
+      document.mozFullScreenElement ||
+      document.msFullscreenElement;
+
+    if (isFullscreen) {
+      iframe.style.width = "100vw";
+      iframe.style.height = "100vh";
+    } else {
+      iframe.style.width = "100%";
+      iframe.style.height = "100%";
+    }
+  }
+</script>
 </section>
 <section data-bs-version="5.1" class="features12 cid-uNQpKI2Pci" id="features012-10">
 	
