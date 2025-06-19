@@ -517,44 +517,39 @@
 
   <!-- ✅ Script for fullscreen functionality and iframe resizing -->
   <script>
-  function openFullscreen() {
-    const container = document.getElementById("iframeContainer");
-    const btn = document.getElementById("fullscreenBtn"); // 🔹 Referencia al botón
-
-    // 🔹 Ocultar botón inmediatamente al hacer clic
-    btn.style.display = "none";
-
-    if (container.requestFullscreen) {
-      container.requestFullscreen();
-    } else if (container.webkitRequestFullscreen) {
-      container.webkitRequestFullscreen();
-    } else if (container.msRequestFullscreen) {
-      container.msRequestFullscreen();
+    function openFullscreen() {
+      const container = document.getElementById("iframeContainer");
+      if (container.requestFullscreen) {
+        container.requestFullscreen();
+      } else if (container.webkitRequestFullscreen) {
+        container.webkitRequestFullscreen();
+      } else if (container.msRequestFullscreen) {
+        container.msRequestFullscreen();
+      }
     }
-  }
 
-  document.addEventListener("fullscreenchange", resizeIframe);
-  document.addEventListener("webkitfullscreenchange", resizeIframe);
-  document.addEventListener("mozfullscreenchange", resizeIframe);
-  document.addEventListener("MSFullscreenChange", resizeIframe);
+    document.addEventListener("fullscreenchange", resizeIframe);
+    document.addEventListener("webkitfullscreenchange", resizeIframe);
+    document.addEventListener("mozfullscreenchange", resizeIframe);
+    document.addEventListener("MSFullscreenChange", resizeIframe);
 
-  function resizeIframe() {
-    const iframe = document.getElementById("gameFrame");
-    const isFullscreen =
-      document.fullscreenElement ||
-      document.webkitFullscreenElement ||
-      document.mozFullScreenElement ||
-      document.msFullscreenElement;
+    function resizeIframe() {
+      const iframe = document.getElementById("gameFrame");
+      const isFullscreen =
+        document.fullscreenElement ||
+        document.webkitFullscreenElement ||
+        document.mozFullScreenElement ||
+        document.msFullscreenElement;
 
-    if (isFullscreen) {
-      iframe.style.width = "100vw";
-      iframe.style.height = "100vh";
-    } else {
-      iframe.style.width = "100%";
-      iframe.style.height = "100%";
+      if (isFullscreen) {
+        iframe.style.width = "100vw";
+        iframe.style.height = "100vh";
+      } else {
+        iframe.style.width = "100%";
+        iframe.style.height = "100%";
+      }
     }
-  }
-</script>
+  </script>
 </section>
 <section data-bs-version="5.1" class="features12 cid-uNQpKI2Pci" id="features012-10">
 	
